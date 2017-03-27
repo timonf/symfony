@@ -310,12 +310,29 @@ class QuestionHelper extends Helper
                 $numMatches = 0;
                 $ofs = 0;
 
+                $autocompleteMatches = array();
+                $remainingMatches = array();
+
                 foreach ($autocomplete as $value) {
+                    // Add exact values to the begin of the matching array
+                    if ($value === $ret) {
+                        array_unshift($autocompleteMatches, $value);
+                        $numMatches++;
+                        continue;
+                    }
+
                     // If typed characters match the beginning chunk of value (e.g. [AcmeDe]moBundle)
                     if (0 === strpos($value, $ret) && $i !== strlen($value)) {
-                        $matches[$numMatches++] = $value;
+                        $autocompleteMatches[] = $value;
+                        $numMatches++;
+                        continue;
                     }
+
+                    $remainingMatches[] = $value;
                 }
+
+                // to keep all original values!
+                $matches = array_merge($autocompleteMatches, $remainingMatches);
             }
 
             // Erase characters from cursor to end of line

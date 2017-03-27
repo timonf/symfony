@@ -664,6 +664,25 @@ class QuestionHelperTest extends AbstractQuestionHelperTest
         $this->assertSame($expectedValue, $answer);
     }
 
+    public function testAmbiguousKeyFromChoiceList()
+    {
+        $possibleChoices = array(
+            'a' => 'berlin',
+            'b' => 'copenhagen',
+            'c' => 'amsterdam',
+        );
+
+        $dialog = new QuestionHelper();
+        $helperSet = new HelperSet(array(new FormatterHelper()));
+        $dialog->setHelperSet($helperSet);
+
+        $question = new ChoiceQuestion('Please select the environment to load', $possibleChoices);
+        $question->setMaxAttempts(1);
+        $answer = $dialog->ask($this->createStreamableInputInterfaceMock($this->getInputStream("b\n")), $this->createOutputInterface(), $question);
+
+        $this->assertSame('b', $answer);
+    }
+
     /**
      * @group        legacy
      * @dataProvider answerProvider
