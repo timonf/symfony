@@ -12,6 +12,7 @@
 namespace Symfony\Component\Translation\Dumper;
 
 use Symfony\Component\Translation\MessageCatalogue;
+use Symfony\Component\Translation\Util\ArrayConverter;
 
 /**
  * PhpFileDumper generates PHP files from a message catalogue.
@@ -25,7 +26,13 @@ class PhpFileDumper extends FileDumper
      */
     public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
     {
-        return "<?php\n\nreturn ".var_export($messages->all($domain), true).";\n";
+        $data = $messages->all($domain);
+
+        if (isset($options['as_tree']) && $options['as_tree']) {
+            $data = ArrayConverter::expandToTree($data);
+        }
+
+        return "<?php\n\nreturn ".var_export($data, true).";\n";
     }
 
     /**

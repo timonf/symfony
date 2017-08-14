@@ -26,4 +26,19 @@ class PhpFileDumperTest extends TestCase
 
         $this->assertStringEqualsFile(__DIR__.'/../fixtures/resources.php', $dumper->formatCatalogue($catalogue, 'messages'));
     }
+
+    public function testTreeFormatCatalogue()
+    {
+        $catalogue = new MessageCatalogue('en');
+        $catalogue->add(
+            array(
+                'foo.bar1' => 'value1',
+                'foo.bar2' => 'value2',
+            )
+        );
+
+        $dumper = new PhpFileDumper();
+
+        $this->assertStringEqualsFile(__DIR__.'/../fixtures/resources_as_tree.php', $dumper->formatCatalogue($catalogue, 'messages', array('as_tree' => true)));
+    }
 }

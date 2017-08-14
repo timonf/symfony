@@ -36,4 +36,19 @@ class JsonFileDumperTest extends TestCase
 
         $this->assertStringEqualsFile(__DIR__.'/../fixtures/resources.dump.json', $dumper->formatCatalogue($catalogue, 'messages', array('json_encoding' => JSON_HEX_QUOT)));
     }
+
+    public function testTreeFormatCatalogue()
+    {
+        $catalogue = new MessageCatalogue('en');
+        $catalogue->add(
+            array(
+                'foo.bar1' => 'value1',
+                'foo.bar2' => 'value2',
+            )
+        );
+
+        $dumper = new JsonFileDumper();
+
+        $this->assertStringEqualsFile(__DIR__.'/../fixtures/resources_as_tree.json', $dumper->formatCatalogue($catalogue, 'messages', array('as_tree' => true)));
+    }
 }

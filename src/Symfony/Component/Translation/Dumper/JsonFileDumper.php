@@ -12,6 +12,7 @@
 namespace Symfony\Component\Translation\Dumper;
 
 use Symfony\Component\Translation\MessageCatalogue;
+use Symfony\Component\Translation\Util\ArrayConverter;
 
 /**
  * JsonFileDumper generates an json formatted string representation of a message catalogue.
@@ -31,7 +32,13 @@ class JsonFileDumper extends FileDumper
             $flags = defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0;
         }
 
-        return json_encode($messages->all($domain), $flags);
+        $data = $messages->all($domain);
+
+        if (isset($options['as_tree']) && $options['as_tree']) {
+            $data = ArrayConverter::expandToTree($data);
+        }
+
+        return json_encode($data, $flags);
     }
 
     /**
