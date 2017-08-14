@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+3.3.7
+-----
+
+ * Added option `as_tree` to JsonFileDumper and PhpFileDumper.
+
 3.2.0
 -----
 
